@@ -1,20 +1,13 @@
-const mysql = require('mysql2');
+require('dotenv').config();
+const mysql = require('mysql2/promise');
 
-// Create the connection to the database
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'snapshopdb'
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10
 });
 
-// Test the connection
-connection.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err.message);
-    return;
-  }
-  console.log('Connected to the MySQL database!');
-});
-
-module.exports = connection;
+module.exports = pool;
